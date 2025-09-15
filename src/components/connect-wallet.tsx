@@ -14,7 +14,7 @@ export default function ConnectWallet() {
 
   if (!mounted) {
     return (
-      <div className='w-full rounded-lg bg-white/10 p-4 shadow-lg'>
+      <div className='rounded-lg bg-white/10 p-4 shadow-lg'>
         <div className=''>Connect Wallet</div>
       </div>
     );

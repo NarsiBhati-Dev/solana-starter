@@ -39,7 +39,6 @@ export default function WalletInfo({
                     setBalance(null);
                 }
             } else {
-                toast.error('No wallet connected');
                 setBalance(null);
             }
         };
@@ -51,7 +50,6 @@ export default function WalletInfo({
             }
             fetchBalance();
         } else {
-            toast.error('No wallet connected');
             setBalance(null);
         }
     }, [connected, publicKey, refreshBalance, setRefreshBalance]);

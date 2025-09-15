@@ -4,7 +4,7 @@ import WalletInfo from '@/components/wallet-info';
 import TransferSOL from '@/components/transfer-s-o-l';
 import RequestAirdrop from '@/components/request-airdrop';
 // import SignMessage from '@/components/sign-message';
-// import CreateAndMintToken from '@/components/create-and-mint-token';
+import CreateAndMintToken from '@/components/create-and-mint-token';
 import { useState } from 'react';
 
 export default function Home() {
@@ -27,7 +27,7 @@ export default function Home() {
         <div className='grid w-full grid-cols-1 gap-4'>
           {/* <SignMessage /> */}
           <TransferSOL />
-          {/* <CreateAndMintToken /> */}
+          <CreateAndMintToken />
         </div>
       </main>
     </>
