@@ -14,13 +14,11 @@ export default function ConnectWallet() {
 
   if (!mounted) {
     return (
-      <div className="w-full bg-white/10 p-4 shadow-lg rounded-lg">
-        <div className="">Connect Wallet</div>
+      <div className='w-full rounded-lg bg-white/10 p-4 shadow-lg'>
+        <div className=''>Connect Wallet</div>
       </div>
     );
   }
 
-  return (
-    <WalletMultiButton className='wallet-button' />
-  );
+  return <WalletMultiButton className='wallet-button' />;
 }

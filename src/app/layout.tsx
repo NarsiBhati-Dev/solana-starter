@@ -28,11 +28,10 @@ export default function RootLayout({
   return (
     <html lang='en' suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased max-w-7xl mx-auto px-4`}
+        className={`${geistSans.variable} ${geistMono.variable} mx-auto max-w-7xl px-4 antialiased`}
       >
-
         <Toaster
-          position="top-right"
+          position='top-right'
           toastOptions={{
             style: {
               background: '#171717',
@@ -42,8 +41,9 @@ export default function RootLayout({
         />
         <Providers>
           <Header />
-          {children}</Providers>
+          {children}
+        </Providers>
       </body>
-    </html >
+    </html>
   );
 }

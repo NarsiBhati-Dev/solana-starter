@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useWallet, useConnection } from "@solana/wallet-adapter-react";
-import { LAMPORTS_PER_SOL } from "@solana/web3.js";
-import { useState } from "react";
-import toast from "react-hot-toast";
+import { useWallet, useConnection } from '@solana/wallet-adapter-react';
+import { LAMPORTS_PER_SOL } from '@solana/web3.js';
+import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 interface RequestAirdropProps {
     onAirdrop?: () => void; // optional callback to refresh balance outside
@@ -13,55 +13,65 @@ export default function RequestAirdrop({ onAirdrop }: RequestAirdropProps) {
     const { publicKey } = useWallet();
     const { connection } = useConnection();
     const [loading, setLoading] = useState(false);
-    const [txSig, setTxSig] = useState<string | null>(null);
+
     const [airdropAttempted, setAirdropAttempted] = useState(false);
     const [amount, setAmount] = useState(1);
 
     async function airdropSol() {
         if (!publicKey) {
-            toast.error("Please connect your wallet");
+            toast.error('Please connect your wallet');
             return;
         }
 
         if (airdropAttempted) {
-            toast.error("Airdrop already attempted today. Try again tomorrow!");
+            toast.error('Airdrop already attempted today. Try again tomorrow!');
             return;
         }
 
         setLoading(true);
         setAirdropAttempted(true);
         try {
-            const sig = await connection.requestAirdrop(
+            await connection.requestAirdrop(
                 publicKey,
-                amount * LAMPORTS_PER_SOL
+                amount * LAMPORTS_PER_SOL,
             );
-            setTxSig(sig);
             toast.success(`Airdropped ${amount} SOL successfully!`);
             if (onAirdrop) onAirdrop();
         } catch {
-            toast.error("Airdrop limit reached. Try again tomorrow!");
+            toast.error('Airdrop limit reached. Try again tomorrow!');
         } finally {
             setLoading(false);
+            setAmount(1);
         }
     }
 
     return (
-        <div className="max-full h-full bg-white/10 p-4 rounded-lg">
-            <h3 className="text-xl font-semibold mb-4 text-white">Request Airdrop</h3>
-            <input
-                type="number"
-                value={amount}
-                onChange={(e) => setAmount(Number(e.target.value))}
-                placeholder="Enter amount in SOL"
-                className="w-full p-2 mb-4 bg-white/5 text-white rounded-md outline-none"
-            />
-            <button
-                onClick={airdropSol}
-                disabled={!publicKey || loading}
-                className="w-full bg-gradient-to-b from-purple-300 to-purple-400 text-black font-bold py-2 px-4 transition duration-200 shadow-lg rounded-md cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-                {loading ? "Processing..." : "Request Airdrop"}
-            </button>
+        <div className='h-full w-full rounded-lg bg-white/10 p-4 shadow-lg'>
+            <h3 className='mb-4 text-center text-lg font-bold text-purple-300'>
+                Request Airdrop
+            </h3>
+
+            <form className='flex flex-col gap-4'>
+                <div className='flex flex-col gap-2'>
+                    <label htmlFor='amount'>Amount in SOL</label>
+                    <input
+                        type='number'
+                        value={amount}
+                        onChange={e => setAmount(Number(e.target.value))}
+                        placeholder='Enter amount in SOL'
+                        className='w-full rounded-md bg-white/5 p-2 text-white outline-none'
+                        required
+                    />
+                </div>
+                <button
+                    onClick={airdropSol}
+                    disabled={!publicKey || loading}
+                    className='w-full cursor-pointer rounded-md bg-gradient-to-r from-purple-300 to-purple-200 px-4 py-2 font-bold text-black shadow-lg transition duration-200 hover:scale-101 disabled:cursor-not-allowed disabled:opacity-50'
+                >
+                    {loading ? 'Processing...' : 'Request Airdrop'}
+                </button>
+            </form>
+
         </div>
     );
 }
