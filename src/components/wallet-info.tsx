@@ -56,7 +56,7 @@ export default function WalletInfo({
 
     if (!connected) {
         return (
-            <p className='h-full w-full text-gray-500 lg:min-h-48'>
+            <p className='h-full w-full shadow-lg rounded-lg bg-white/10 text-gray-200 lg:min-h-48 flex items-center justify-center'>
                 No wallet connected
             </p>
         );
@@ -69,7 +69,7 @@ export default function WalletInfo({
                 {publicKey?.toBase58().slice(0, 10)}...
                 {publicKey?.toBase58().slice(-10)}
                 <button
-                    className='cursor-pointer rounded-md bg-white/10 p-1 text-purple-300 lg:px-2'
+                    className='cursor-pointer rounded-md bg-gradient-to-r from-purple-300 to-purple-200 p-1 text-black lg:px-2 shadow-lg hover:scale-102 transition-all duration-200 ease-in-out'
                     onClick={handleCopy}
                 >
                     Copy
