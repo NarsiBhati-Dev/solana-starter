@@ -1,23 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useWallet } from '@solana/wallet-adapter-react';
-import { Connection, PublicKey, LAMPORTS_PER_SOL } from '@solana/web3.js';
-import { SOLANA_ENDPOINT } from '@/config';
+import { useConnection, useWallet } from '@solana/wallet-adapter-react';
+import { PublicKey, LAMPORTS_PER_SOL, Commitment } from '@solana/web3.js';
 import toast from 'react-hot-toast';
 
-const connection = new Connection(SOLANA_ENDPOINT);
-
-interface WalletInfoProps {
-    refreshBalance: boolean;
-    setRefreshBalance: (refreshBalance: boolean) => void;
-}
-
-export default function WalletInfo({
-    refreshBalance,
-    setRefreshBalance,
-}: WalletInfoProps) {
+export default function WalletInfo() {
     const { connected, publicKey } = useWallet();
+    const { connection } = useConnection();
     const [balance, setBalance] = useState<number | null>(null);
 
     const handleCopy = () => {
@@ -25,34 +15,42 @@ export default function WalletInfo({
         toast.success('Copied to clipboard');
     };
 
-    // fetch balance when wallet connects or when refresh is requested
+    // keep SOL balance live via account change subscription
     useEffect(() => {
+        let subscriptionId: number | null = null;
+
         const fetchBalance = async () => {
-            if (publicKey) {
-                try {
-                    const lamports = await connection.getBalance(
-                        new PublicKey(publicKey),
-                    );
-                    setBalance(lamports / LAMPORTS_PER_SOL);
-                } catch {
-                    toast.error('Failed to fetch balance');
-                    setBalance(null);
-                }
-            } else {
+            if (!publicKey) return;
+            try {
+                const lamports = await connection.getBalance(new PublicKey(publicKey));
+                setBalance(lamports / LAMPORTS_PER_SOL);
+            } catch {
+                toast.error('Failed to fetch balance');
                 setBalance(null);
             }
         };
 
         if (connected && publicKey) {
-            if (refreshBalance) {
-                toast.success('Refreshing balance due to airdrop...');
-                setRefreshBalance(false);
-            }
             fetchBalance();
+            const commitment: Commitment = 'confirmed';
+            subscriptionId = connection.onAccountChange(
+                new PublicKey(publicKey),
+                accountInfo => {
+                    const lamports = accountInfo.lamports ?? 0;
+                    setBalance(lamports / LAMPORTS_PER_SOL);
+                },
+                commitment,
+            );
         } else {
             setBalance(null);
         }
-    }, [connected, publicKey, refreshBalance, setRefreshBalance]);
+
+        return () => {
+            if (subscriptionId !== null) {
+                connection.removeAccountChangeListener(subscriptionId).catch(() => { });
+            }
+        };
+    }, [connected, publicKey, connection]);
 
     if (!connected) {
         return (

@@ -5,11 +5,7 @@ import { LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 
-interface RequestAirdropProps {
-  onAirdrop?: () => void; // optional callback to refresh balance outside
-}
-
-export default function RequestAirdrop({ onAirdrop }: RequestAirdropProps) {
+export default function RequestAirdrop() {
   const { publicKey } = useWallet();
   const { connection } = useConnection();
   const [loading, setLoading] = useState(false);
@@ -33,7 +29,6 @@ export default function RequestAirdrop({ onAirdrop }: RequestAirdropProps) {
     try {
       await connection.requestAirdrop(publicKey, amount * LAMPORTS_PER_SOL);
       toast.success(`Airdropped ${amount} SOL successfully!`);
-      if (onAirdrop) onAirdrop();
     } catch {
       toast.error('Airdrop limit reached. Try again tomorrow!');
     } finally {
