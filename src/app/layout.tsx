@@ -28,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang='en' suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} mx-auto max-w-7xl px-4 antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} mx-auto max-w-7xl px-4 antialiased bg-background text-foreground`}
       >
         <Toaster
           position='top-right'

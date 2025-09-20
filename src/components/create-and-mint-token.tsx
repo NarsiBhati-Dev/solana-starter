@@ -181,63 +181,78 @@ export default function CreateAndMintToken() {
     };
 
     return (
-        <div className="h-full w-full rounded-lg bg-white/10 p-4 shadow-lg">
-            <h3 className="text-center text-lg font-bold text-purple-300">
+        <div className="h-full w-full rounded-lg bg-white/10 p-3 sm:p-4 shadow-lg">
+            <h3 className="text-center text-base sm:text-lg font-bold text-purple-300">
                 Create & Mint SPL Token
             </h3>
 
             <button
                 onClick={handleCreateMint}
                 disabled={!publicKey || loading}
-                className="mt-4 w-full rounded-md bg-gradient-to-r from-purple-300 to-purple-200 px-4 py-2 font-bold text-black shadow-lg transition duration-200 cursor-pointer hover:scale-101 disabled:cursor-not-allowed disabled:opacity-50"
+                className="mt-4 w-full rounded-md bg-gradient-to-r from-purple-300 to-purple-200 px-3 sm:px-4 py-2 font-bold text-black shadow-lg transition duration-200 cursor-pointer hover:scale-101 disabled:cursor-not-allowed disabled:opacity-50 text-sm sm:text-base"
             >
                 {loading ? 'Minting...' : 'Create & Mint'}
             </button>
 
             {mintAddress && (
-                <div className="mt-3 flex flex-col gap-6 bg-white/4 p-4 rounded-lg">
-                    <p className="text-sm text-purple-300">
-                        <span className="font-semibold">Token Mint Address</span> {mintAddress}
-                    </p>
-                    <div className="flex items-center gap-4">
-                        <button
-                            onClick={() => {
-                                if (!mintAddress) return;
-                                navigator.clipboard.writeText(mintAddress);
-                                toast.success('Mint address copied');
-                            }}
-                            className="cursor-pointer rounded-md bg-gradient-to-r from-purple-300 to-purple-200 px-2 py-1 text-sm font-semibold text-black shadow-lg transition duration-200 hover:scale-102"
-                        >
-                            Copy
-                        </button>
-                        <a
-                            href={`https://explorer.solana.com/address/${mintAddress}?cluster=devnet`}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="rounded-md bg-white/5 px-2 py-1 text-sm font-semibold text-purple-200 underline decoration-purple-300/60 underline-offset-2 hover:decoration-purple-200"
-                        >
-                            View on Explorer
-                        </a>
-                        {mintList.length > 1 && (
+                <div className="mt-3 flex flex-col gap-4 sm:gap-6 bg-white/4 p-3 sm:p-4 rounded-lg">
+                    <div className="break-all">
+                        <p className="text-xs sm:text-sm text-purple-300">
+                            <span className="font-semibold">Token Mint Address</span>
+                        </p>
+                        <p className="text-xs sm:text-sm text-purple-200 font-mono mt-1">
+                            {mintAddress}
+                        </p>
+                    </div>
+
+                    {/* Button group - responsive layout */}
+                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
+                        <div className="flex flex-wrap gap-2">
                             <button
-                                onClick={() => setShowAllModal(true)}
-                                className="ml-2 cursor-pointer rounded-md bg-white/5 px-2 py-1 text-sm font-semibold text-purple-200 hover:bg-white/10"
+                                onClick={() => {
+                                    if (!mintAddress) return;
+                                    navigator.clipboard.writeText(mintAddress);
+                                    toast.success('Mint address copied');
+                                }}
+                                className="cursor-pointer rounded-md bg-gradient-to-r from-purple-300 to-purple-200 px-2 sm:px-3 py-1 text-xs sm:text-sm font-semibold text-black shadow-lg transition duration-200 hover:scale-102 flex-shrink-0"
                             >
-                                Show all ({mintList.length})
+                                Copy
                             </button>
-                        )}
+                            <a
+                                href={`https://explorer.solana.com/address/${mintAddress}?cluster=devnet`}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="rounded-md bg-white/5 px-2 sm:px-3 py-1 text-xs sm:text-sm font-semibold text-purple-200 underline decoration-purple-300/60 underline-offset-2 hover:decoration-purple-200 flex-shrink-0"
+                            >
+                                <span className="hidden sm:inline">View on Explorer</span>
+                                <span className="sm:hidden">Explorer</span>
+                            </a>
+                            {mintList.length > 1 && (
+                                <button
+                                    onClick={() => setShowAllModal(true)}
+                                    className="cursor-pointer rounded-md bg-white/5 px-2 sm:px-3 py-1 text-xs sm:text-sm font-semibold text-purple-200 hover:bg-white/10 flex-shrink-0"
+                                >
+                                    <span className="hidden sm:inline">Show all ({mintList.length})</span>
+                                    <span className="sm:hidden">All ({mintList.length})</span>
+                                </button>
+                            )}
+                        </div>
                         {tokenBalance !== null && (
-                            <p className="text-sm font-semibold bg-white/5 rounded-md px-2 py-1 text-green-400">Balance: {tokenBalance} tokens</p>
+                            <div className="flex-shrink-0">
+                                <p className="text-xs sm:text-sm font-semibold bg-white/5 rounded-md px-2 sm:px-3 py-1 text-green-300 inline-block">
+                                    Balance: {tokenBalance} tokens
+                                </p>
+                            </div>
                         )}
                     </div>
                 </div>
             )}
 
             {showAllModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-                    <div className="w-full max-w-2xl rounded-lg bg-zinc-900 p-4 shadow-xl">
-                        <div className="mb-2 flex items-center justify-between">
-                            <h4 className="text-sm font-semibold text-purple-200">Your Mints</h4>
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+                    <div className="w-full max-w-4xl rounded-lg bg-zinc-900 p-3 sm:p-4 shadow-xl max-h-[90vh] flex flex-col">
+                        <div className="mb-2 flex items-center justify-between flex-shrink-0">
+                            <h4 className="text-sm sm:text-base font-semibold text-purple-200">Your Mints</h4>
                             <button
                                 onClick={() => setShowAllModal(false)}
                                 className="rounded-md bg-white/5 px-2 py-1 text-xs text-purple-200 hover:bg-white/10"
@@ -248,22 +263,25 @@ export default function CreateAndMintToken() {
                         {mintList.length === 0 ? (
                             <p className="text-sm text-purple-200/70">No mints found.</p>
                         ) : (
-                            <div className="flex max-h-72 flex-col gap-2 overflow-auto">
+                            <div className="flex flex-col gap-2 overflow-auto flex-1 min-h-0">
                                 {mintList.map(m => {
                                     const isActive = m === mintAddress;
                                     return (
-                                        <div key={m} className={`flex items-center justify-between rounded-md p-2 ${isActive ? 'bg-white/10' : 'bg-white/5'}`}>
-                                            <div className="flex items-center gap-2">
-                                                <span className="rounded-full bg-white/10 px-2 py-0.5 text-[10px] text-purple-200">{isActive ? 'Active' : 'Mint'}</span>
-                                                <span className="font-mono text-xs text-purple-200">{m.slice(0, 8)}...{m.slice(-8)}</span>
+                                        <div key={m} className={`flex flex-col sm:flex-row sm:items-center justify-between rounded-md p-2 sm:p-3 gap-2 sm:gap-0 ${isActive ? 'bg-white/10' : 'bg-white/5'}`}>
+                                            <div className="flex items-center gap-2 min-w-0 flex-1">
+                                                <span className="rounded-full bg-white/10 px-2 py-0.5 text-[10px] text-purple-200 flex-shrink-0">{isActive ? 'Active' : 'Mint'}</span>
+                                                <span className="font-mono text-xs text-purple-200 break-all sm:break-normal">
+                                                    <span className="hidden sm:inline">{m.slice(0, 8)}...{m.slice(-8)}</span>
+                                                    <span className="sm:hidden">{m.slice(0, 6)}...{m.slice(-6)}</span>
+                                                </span>
                                             </div>
-                                            <div className="flex items-center gap-2">
+                                            <div className="flex flex-wrap items-center gap-1 sm:gap-2">
                                                 <button
                                                     onClick={() => {
                                                         navigator.clipboard.writeText(m);
                                                         toast.success('Copied mint');
                                                     }}
-                                                    className="rounded-md bg-gradient-to-r from-purple-300 to-purple-200 px-2 py-1 text-xs font-semibold text-black hover:scale-102"
+                                                    className="rounded-md bg-gradient-to-r from-purple-300 to-purple-200 px-2 py-1 text-xs font-semibold text-black hover:scale-102 flex-shrink-0"
                                                 >
                                                     Copy
                                                 </button>
@@ -271,7 +289,7 @@ export default function CreateAndMintToken() {
                                                     href={`https://explorer.solana.com/address/${m}?cluster=devnet`}
                                                     target="_blank"
                                                     rel="noreferrer"
-                                                    className="rounded-md bg-white/5 px-2 py-1 text-xs font-semibold text-purple-200 underline underline-offset-2 hover:bg-white/10"
+                                                    className="rounded-md bg-white/5 px-2 py-1 text-xs font-semibold text-purple-200 underline underline-offset-2 hover:bg-white/10 flex-shrink-0"
                                                 >
                                                     Explorer
                                                 </a>
@@ -298,7 +316,7 @@ export default function CreateAndMintToken() {
                                                             }
                                                             setShowAllModal(false);
                                                         }}
-                                                        className="rounded-md bg-white/10 px-2 py-1 text-xs font-semibold text-purple-200 hover:bg-white/20"
+                                                        className="rounded-md bg-white/10 px-2 py-1 text-xs font-semibold text-purple-200 hover:bg-white/20 flex-shrink-0"
                                                     >
                                                         Set Active
                                                     </button>
